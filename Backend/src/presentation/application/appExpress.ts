@@ -1,4 +1,5 @@
 import express from "express";
+import usersRouter from "../routes/usersRouter";
 
 class AppExpress {
     private app = express();
@@ -10,6 +11,7 @@ class AppExpress {
     }
 
     build() {
+        this.app.use("/api/users", usersRouter);
     }
 
     listen() {

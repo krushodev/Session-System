@@ -2,17 +2,12 @@ import fs from "fs/promises";
 import { resolve } from "path";
 import { randomUUID } from "crypto";
 
-/* interface UserFileRepositoryInterface {
-    list: () => void;
-    findOne: (id: string) => void;
-    saveOne: (data: object) => void;
-    deleteOne: (id: string) => void;
-} */
+import IUserFileRepository from "./userFileRepositoryInterface";
 
-class UserFileRepository /* implements UserFileRepositoryInterface */ {
+class UserFileRepository implements IUserFileRepository {
     private path = resolve("src/data/files/users.json");
 
-    async list() {
+    public async list() {
         const users = await fs.readFile(this.path, "utf-8");
 
         if (!users) await fs.writeFile(this.path, '[]');
@@ -20,7 +15,7 @@ class UserFileRepository /* implements UserFileRepositoryInterface */ {
         return users ? JSON.parse(users) : [];
     }  
 
-    async findOne(id: string) {
+    public async findOne(id: string) {
         const users = await this.list();
 
         const user = users.find((user: { id: string }) => user.id === id);
@@ -28,7 +23,7 @@ class UserFileRepository /* implements UserFileRepositoryInterface */ {
         return user;
     }
 
-    async saveOne(data: object) {
+    public async saveOne(data: object) {
         const users = await this.list();
 
         users.push({...data, id: randomUUID()});
@@ -38,7 +33,7 @@ class UserFileRepository /* implements UserFileRepositoryInterface */ {
         return users;
     }
 
-    async removeOne(id: string) {
+    public async removeOne(id: string) {
         const users = await this.list();
 
         const filter = users.filter((user: { id: string }) => user.id !== id);

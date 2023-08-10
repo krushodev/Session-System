@@ -1,6 +1,6 @@
 import { createContainer, asClass, Lifetime } from "awilix";
 
-import UserFileRepository from "./data/repositories/userFileRepository";
+import UserFileRepository from "./data/repositories/userFileRepository/userFileRepository";
 
 const container = createContainer();
 

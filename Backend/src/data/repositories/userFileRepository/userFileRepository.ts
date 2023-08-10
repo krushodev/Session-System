@@ -3,16 +3,17 @@ import { resolve } from "path";
 import { randomUUID } from "crypto";
 
 import IUserFileRepository from "./userFileRepositoryInterface";
+import User from "../../../domain/managers/entities/user";
 
 class UserFileRepository implements IUserFileRepository {
     private path = resolve("src/data/files/users.json");
 
     public async list() {
-        const users = await fs.readFile(this.path, "utf-8");
+        const users: Promise<User[]> = JSON.parse( await fs.readFile(this.path, "utf-8" ));
 
         if (!users) await fs.writeFile(this.path, '[]');
 
-        return users ? JSON.parse(users) : [];
+        return users;
     }  
 
     public async findOne(id: string) {
@@ -23,20 +24,22 @@ class UserFileRepository implements IUserFileRepository {
         return user;
     }
 
-    public async saveOne(data: object) {
+    public async saveOne(data: { name: string, email: string, password: string }) {
         const users = await this.list();
 
-        users.push({...data, id: randomUUID()});
+        const newUser = { ...data, id: randomUUID() };
+
+        users.push(newUser);
 
         await fs.writeFile(this.path, JSON.stringify(users, null, 2));
 
-        return users;
+        return newUser;
     }
 
     public async removeOne(id: string) {
         const users = await this.list();
 
-        const filter = users.filter((user: { id: string }) => user.id !== id);
+        const filter = users.filter((user) => user.id !== id);
 
         await fs.writeFile(this.path, JSON.stringify(filter, null, 2));
 

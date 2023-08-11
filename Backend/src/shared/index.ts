@@ -6,13 +6,14 @@ import User from "../domain/entities/user";
 
 dotenv.config();
 
-const generateHash = async (password: string) => await bcrypt.hash(password, 10);
-const validateHash = async (password: string, hash: string) => await bcrypt.compare(password, hash);
+export const generateHash = async (password: string) => await bcrypt.hash(password, 10);
 
-const generateAccessToken = (user: User) => {
+export const validateHash = async (password: string, hash: string) => await bcrypt.compare(password, hash);
+
+export const generateAccessToken = (user: User) => {
     return jwt.sign({ user: {...user, password: undefined } }, process.env.JWT_ACCESS_KEY!, { expiresIn: "1m" });
 }
 
-const generateRefreshToken = (user: User) => {
+export const generateRefreshToken = (user: User) => {
     return jwt.sign({ user: {...user, password: undefined } }, process.env.JWT_REFRESH_KEY!, { expiresIn: "1m" });
 }

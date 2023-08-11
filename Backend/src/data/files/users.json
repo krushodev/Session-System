@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "name": "Nacho",
+    "email": "nacho@gmail.com",
+    "password": "$2b$10$smrSbVBnf5K9jyKLpcGLxulePczVV8SNgXGsHZ/u003vFwfvDj34W",
+    "id": "1cb17f48-095f-4c2b-9945-962bd452750b"
+  }
+]

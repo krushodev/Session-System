@@ -2,10 +2,10 @@ import fs from "fs/promises";
 import { resolve } from "path";
 import { randomUUID } from "crypto";
 
-import IUserFileRepository from "./userFileRepositoryInterface";
-import User from "../../../domain/managers/entities/user";
+import IUserRepository from "./interfaces/userRepositoryInterface";
+import User from "../../domain/entities/user";
 
-class UserFileRepository implements IUserFileRepository {
+class UserFileRepository implements IUserRepository {
     private path = resolve("src/data/files/users.json");
 
     public async list() {
@@ -19,7 +19,15 @@ class UserFileRepository implements IUserFileRepository {
     public async findOne(id: string) {
         const users = await this.list();
 
-        const user = users.find((user: { id: string }) => user.id === id);
+        const user = users.find((user) => user.id === id);
+
+        return user;
+    }
+
+    public async findOneByEmail(email: string) {
+        const users = await this.list();
+
+        const user = users.find((user) => user.email === email);
 
         return user;
     }
@@ -27,7 +35,7 @@ class UserFileRepository implements IUserFileRepository {
     public async saveOne(data: { name: string, email: string, password: string }) {
         const users = await this.list();
 
-        const newUser = { ...data, id: randomUUID() };
+        const newUser: User = { ...data, id: randomUUID() };
 
         users.push(newUser);
 

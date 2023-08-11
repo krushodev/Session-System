@@ -1,5 +1,6 @@
 import express from "express";
 import usersRouter from "../routes/usersRouter";
+import sessionsRouter from "../routes/sessionsRouter";
 
 class AppExpress {
     private app = express();
@@ -12,6 +13,7 @@ class AppExpress {
 
     build() {
         this.app.use("/api/users", usersRouter);
+        this.app.use("/api/sessions", sessionsRouter);
     }
 
     listen() {

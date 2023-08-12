@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 
 import SessionManager from "../../domain/managers/sessionManager/sessionManager";
+import { generateAccessToken } from "../../shared";
 
 class SessionController {
     public static async login(req: Request, res: Response) {
         try {
             const manager = new SessionManager();
-            await manager.login(req.body);
-            res.status(200).send({ status: "success", message: "Te has logueado correctamente" });
+            const user = await manager.login(req.body);
+            const token = generateAccessToken(user);
+            res.status(200).send({ status: "success", message: "Te has logueado correctamente", accessToken: token });
         } catch (err) {
             res.status(500).send({ status: "error", message: "Something went wrong" });
         }

@@ -16,7 +16,7 @@ class SessionManager implements ISessionManager {
 
         if (!passwordValidation) throw new Error("Incorrect password");
 
-        return true;
+        return user;
     }
 
     public async signup(data: { name: string, email: string, password: string } ) {

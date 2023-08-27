@@ -1,17 +1,48 @@
+import { useFormik } from "formik";
+
 const RegisterForm = () => {
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: ""
+    },
+    onSubmit: (values) => {
+      handleSubmit(values);
+    }
+  });
+
+  const handleSubmit = async(data: { username: string, email: string, password: string }) => {
+    try {
+      await fetch("http://localhost:8085/api/sessions/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      alert("Registro exitoso");
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <form>
+    <form onSubmit={formik.handleSubmit}>
       <div>
-        <label htmlFor="username">Name</label>
-        <input type="text" id="username"/>
+        <label htmlFor="username">Username</label>
+        <input type="text" onChange={formik.handleChange} name="username" id="username"/>
       </div>
       <div>
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" />
+        <input type="email" onChange={formik.handleChange} name="email" id="email" />
       </div>
       <div>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" />
+        <input type="password" onChange={formik.handleChange} name="password" id="password" />
       </div>
       <button type="submit">Enviar</button>
     </form>

@@ -1,10 +1,6 @@
-import { useAuth } from "../context/authContext"
-
 const Private = () => {
 
-  const auth = useAuth();
-
-  console.log(auth?.getAccessToken());
+  // console.log(auth?.getAccessToken());
 
   return (
     <div>

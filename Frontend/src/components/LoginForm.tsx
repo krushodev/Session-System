@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
-import { useAuth } from "../context/authContext";
 
+import {  useAuth } from "../context/authContext";
 import { AuthResponse } from "../types";
+import { Redirect } from "wouter";
 
 const LoginForm = () => {
-
   const auth = useAuth();
 
   const formik = useFormik({
@@ -31,13 +31,15 @@ const LoginForm = () => {
 
       auth?.saveUser(data);
 
-      console.log(data.payload);
-
     } catch (error) {
       console.log(error);
     }
   }
-  
+
+  if (auth?.isAuthenticated) {
+    return <Redirect to="/" />
+  }
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div>

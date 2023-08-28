@@ -1,11 +1,11 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import { RequestWithUser } from "../../types";
 
 interface ResponseExpected {
     user: {
         id: string;
-        name: string;
+        username: string;
         email: string;
         password: undefined;
     }

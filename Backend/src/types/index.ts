@@ -3,7 +3,7 @@ import { Request } from "express";
 export interface RequestWithUser extends Request {
     user?: {
         id: string;
-        name: string;
+        username: string;
         email: string;
         password: undefined;
     }

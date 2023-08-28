@@ -19,7 +19,7 @@ class SessionManager implements ISessionManager {
         return user;
     }
 
-    public async signup(data: { name: string, email: string, password: string } ) {
+    public async signup(data: { username: string, email: string, password: string } ) {
         const hashedPassword = await generateHash(data.password);
 
         await this.userRepository.saveOne({...data, password: hashedPassword});

@@ -14,7 +14,7 @@ class UserManager implements IUserManager {
         return await this.userRespository.findOne(id);
     }
 
-    public async create(data: { name: string, email: string, password: string }) { 
+    public async create(data: { username: string, email: string, password: string }) { 
         return await this.userRespository.saveOne(data);
     }
 

@@ -32,7 +32,7 @@ class UserFileRepository implements IUserRepository {
         return user;
     }
 
-    public async saveOne(data: { name: string, email: string, password: string }) {
+    public async saveOne(data: { username: string, email: string, password: string }) {
         const users = await this.list();
 
         const newUser: User = { ...data, id: randomUUID() };

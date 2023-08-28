@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import SessionManager from "../../domain/managers/sessionManager/sessionManager";
 import { generateAccessToken } from "../../shared";
+import { RequestWithUser } from "../../types";
 
 class SessionController {
     public static async login(req: Request, res: Response) {
@@ -25,13 +26,14 @@ class SessionController {
         }
     }
 
-    /* public static async private(req: Request, res: Response) {
+    public static async private(req: RequestWithUser, res: Response) {
         try {
-            
+            const { user } = req;
+            res.status(200).send({ status: "success", data: user });
         } catch (err) {
             res.status(500).send({ status: "error", message: "Something went wrong" });
         }
-    } */
+    }
 }
 
 export default SessionController;

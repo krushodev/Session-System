@@ -1,6 +1,11 @@
 import { useFormik } from "formik";
+import { useAuth } from "../context/authContext";
+
+import { AuthResponse } from "../types";
 
 const LoginForm = () => {
+
+  const auth = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -12,27 +17,27 @@ const LoginForm = () => {
     }
   });
 
-  const handleSubmit = async(data: { email: string, password: string }) => {
+  const handleSubmit = async(values: { email: string, password: string }) => {
     try {
       const response = await fetch("http://localhost:8085/api/sessions/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(values)
       });
 
-      const json = await response.json();
+      const data: AuthResponse = await response.json();
 
-      console.log(json);
+      auth?.saveUser(data);
+
+      console.log(data.payload);
 
     } catch (error) {
       console.log(error);
     }
   }
-
-
-
+  
   return (
     <form onSubmit={formik.handleSubmit}>
       <div>

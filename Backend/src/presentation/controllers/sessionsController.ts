@@ -8,8 +8,8 @@ class SessionController {
         try {
             const manager = new SessionManager();
             const user = await manager.login(req.body);
-            const token = generateAccessToken(user);
-            res.status(200).send({ status: "success", message: "Te has logueado correctamente", accessToken: token });
+            const accessToken = generateAccessToken(user);
+            res.status(200).send({ status: "success", message: "Te has logueado correctamente", payload: { accessToken, user: { ...user, password: undefined }} });
         } catch (err) {
             res.status(500).send({ status: "error", message: "Something went wrong" });
         }

@@ -10,3 +10,7 @@ export interface AuthResponse {
         refreshToken: string;
     }
 }
+
+export interface AuthResponseError {
+    error: string,
+}

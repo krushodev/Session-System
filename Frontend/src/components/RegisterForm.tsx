@@ -1,9 +1,12 @@
 import { useFormik } from "formik";
 import { useAuth } from "../context/authContext";
 import { Redirect } from "wouter";
+import { AuthResponseError } from "../types";
+import { useState } from "react";
 
 const RegisterForm = () => {
   const auth = useAuth();
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -16,24 +19,38 @@ const RegisterForm = () => {
     }
   });
 
-  const handleSubmit = async(data: { username: string, email: string, password: string }) => {
+  const handleSubmit = async(values: { username: string, email: string, password: string }) => {
     try {
-      await fetch("http://localhost:8085/api/sessions/signup", {
+      const response = await fetch("http://localhost:8085/api/sessions/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(values)
       });
+
+      if (!(response.ok)) {
+        const data: AuthResponseError = await response.json();
+        alert(`${data.error}`);
+        
+        return;
+      }
 
       alert("Registro exitoso");
 
+      setIsRegistered(true);
     } catch (error) {
       console.log(error);
     }
   }
 
-  if (auth?.isAuthenticated) return <Redirect to="/" />
+  if (auth?.isAuthenticated) {
+    return <Redirect to="/" />
+  }
+
+  else if (isRegistered) {
+    return <Redirect to="/login" />
+  }
 
   return (
     <form onSubmit={formik.handleSubmit}>

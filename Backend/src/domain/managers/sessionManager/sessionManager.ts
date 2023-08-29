@@ -14,11 +14,11 @@ class SessionManager implements ISessionManager {
     public async login(data: { email: string, password: string }) {
         const user = await this.userRepository.findOneByEmail(data.email);
 
-        if (!user) throw new Error("User not found");
+        if (!user) throw new Error("Incorrect user or password");
        
         const passwordValidation = await validateHash(data.password, user.password);
 
-        if (!passwordValidation) throw new Error("Incorrect password");
+        if (!passwordValidation) throw new Error("Incorrect user or password");
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
@@ -27,6 +27,10 @@ class SessionManager implements ISessionManager {
     }
 
     public async signup(data: { username: string, email: string, password: string } ) {
+        const userExists = await this.userRepository.findOneByEmail(data.email);
+
+        if (userExists) throw new Error("User already exists");
+
         const hashedPassword = await generateHash(data.password);
 
         await this.userRepository.saveOne({...data, password: hashedPassword});
@@ -45,7 +49,7 @@ class SessionManager implements ISessionManager {
 
         const user = await this.userRepository.findOne(userId);
 
-        if (!user) throw new Error("User not found");
+        if (!user) throw new Error("Incorrect user");
 
         const newAccessToken = generateAccessToken(user);
 

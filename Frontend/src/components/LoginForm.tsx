@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { Redirect } from "wouter";
 
 import {  useAuth } from "../context/authContext";
-import { AuthResponse } from "../types";
+import { AuthResponse, AuthResponseError } from "../types";
 
 const LoginForm = () => {
   const auth = useAuth();
@@ -27,12 +27,18 @@ const LoginForm = () => {
         body: JSON.stringify(values)
       });
 
-      const data: AuthResponse = await response.json();
+      if (response.ok) {
+        const data: AuthResponse = await response.json();
+        auth?.saveUserData(data);
+        
+        return;
+      }
 
-      auth?.saveUserData(data);
-
-    } catch (error) {
-      console.log(error);
+      const data: AuthResponseError = await response.json();
+      
+      alert(`${data.error}`);
+    } catch (err) {
+      console.log(err);
     }
   }
 

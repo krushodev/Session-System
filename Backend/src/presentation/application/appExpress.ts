@@ -3,6 +3,7 @@ import cors from "cors";
 
 import usersRouter from "../routes/usersRouter";
 import sessionsRouter from "../routes/sessionsRouter";
+import errorHandler from "../middlewares/errorHandler";
 
 class AppExpress {
     private app = express();
@@ -17,6 +18,7 @@ class AppExpress {
     build() {
         this.app.use("/api/users", usersRouter);
         this.app.use("/api/sessions", sessionsRouter);
+        this.app.use(errorHandler);
     }
 
     listen() {

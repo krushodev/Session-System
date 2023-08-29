@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
     const [user, setUser] = useState<User | undefined>();
     const [accessToken, setAccessToken] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
     
     const saveUserData = (data: AuthResponse) => {
         const { accessToken, refreshToken } = data.payload;
@@ -42,8 +43,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
     const checkData = async() => {
         const refreshToken = JSON.parse(localStorage.getItem("token")!);
 
-        if (!(refreshToken) || isExpired(refreshToken)) return;
-
+        if (!(refreshToken) || isExpired(refreshToken)) {
+            setLoading(false);
+            return;
+        }
+        
         try {
             const response = await fetch("http://localhost:8085/api/sessions/refresh-token", {
                 method: "POST",
@@ -66,6 +70,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
             setAccessToken(accessToken);
             setUser(decoded!.user);
             setIsAuthenticated(true);
+
+            setLoading(false);
         } catch (err) {
             console.log(err)
         }
@@ -77,7 +83,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
     
     return(
         <AuthContext.Provider value={{ isAuthenticated, saveUserData, getAccessToken, getUser }}>
-            { children }
+            { loading ? <h2>Cargando datos...</h2> : children }
         </AuthContext.Provider>
     )
 }

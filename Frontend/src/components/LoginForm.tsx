@@ -36,9 +36,7 @@ const LoginForm = () => {
     }
   }
 
-  if (auth?.isAuthenticated) {
-    return <Redirect to="/" />
-  }
+  if (auth?.isAuthenticated) return <Redirect to="/" />
 
   return (
     <form onSubmit={formik.handleSubmit}>

@@ -1,5 +1,6 @@
 import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
+
 import { RequestWithUser, ResponseJWT } from "../../types";
 
 const auth = (req: RequestWithUser, res: Response, next: NextFunction) => {

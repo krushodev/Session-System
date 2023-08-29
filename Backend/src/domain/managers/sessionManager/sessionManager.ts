@@ -3,10 +3,10 @@ import jwt from "jsonwebtoken";
 import container from "../../../container";
 
 import IUserRepository from "../../../data/repositories/interfaces/userRepositoryInterface";
-import { generateAccessToken, generateHash, generateRefreshToken, validateHash } from "../../../shared";
 import ISessionManager from "./sessionManagerInterface";
-
 import { ResponseJWT } from "../../../types";
+
+import { generateAccessToken, generateHash, generateRefreshToken, validateHash } from "../../../shared";
 
 class SessionManager implements ISessionManager {
     private userRepository: IUserRepository = container.resolve("UserRepository"); 

@@ -1,6 +1,9 @@
 import { useFormik } from "formik";
+import { useAuth } from "../context/authContext";
+import { Redirect } from "wouter";
 
 const RegisterForm = () => {
+  const auth = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -29,6 +32,8 @@ const RegisterForm = () => {
       console.log(error);
     }
   }
+
+  if (auth?.isAuthenticated) return <Redirect to="/" />
 
   return (
     <form onSubmit={formik.handleSubmit}>

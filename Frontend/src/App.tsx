@@ -6,9 +6,11 @@ import Private from "./components/Private";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/helper/ProtectedRoute";
 
+import { AuthProvider } from './context/authContext.tsx'
+
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Navbar/>
       <Route path="/">
         <ProtectedRoute>
@@ -17,7 +19,7 @@ function App() {
       </Route>
       <Route path="/signup" component={RegisterForm} />
       <Route path="/login" component={LoginForm} />
-    </>
+    </AuthProvider>
   )
 }
 

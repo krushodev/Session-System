@@ -8,6 +8,7 @@ interface AuthContextType {
   saveUserData: (data: AuthResponse) => void;
   getUser: () => User | undefined;
   getAccessToken: () => string;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -40,11 +41,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
         return user;
     }
 
+    const logout = () => {
+        localStorage.removeItem("token");
+        setUser(undefined);
+        setAccessToken("");
+        setIsAuthenticated(false);
+
+    }
+
     const checkData = async() => {
         const refreshToken = JSON.parse(localStorage.getItem("token")!);
 
         if (!(refreshToken) || isExpired(refreshToken)) {
             setLoading(false);
+
             return;
         }
         
@@ -82,7 +92,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
     }, []);
     
     return(
-        <AuthContext.Provider value={{ isAuthenticated, saveUserData, getAccessToken, getUser }}>
+        <AuthContext.Provider value={{ isAuthenticated, saveUserData, getAccessToken, getUser, logout }}>
             { loading ? <h2>Cargando datos...</h2> : children }
         </AuthContext.Provider>
     )

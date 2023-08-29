@@ -1,8 +1,8 @@
 import { useFormik } from "formik";
+import { Redirect } from "wouter";
 
 import {  useAuth } from "../context/authContext";
 import { AuthResponse } from "../types";
-import { Redirect } from "wouter";
 
 const LoginForm = () => {
   const auth = useAuth();

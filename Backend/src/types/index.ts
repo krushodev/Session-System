@@ -8,3 +8,12 @@ export interface RequestWithUser extends Request {
         password: undefined;
     }
 }
+
+export interface ResponseJWT{
+    user: {
+        id: string;
+        username: string;
+        email: string;
+        password: undefined;
+    }
+}

@@ -1,15 +1,6 @@
 import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
-import { RequestWithUser } from "../../types";
-
-interface ResponseExpected {
-    user: {
-        id: string;
-        username: string;
-        email: string;
-        password: undefined;
-    }
-}
+import { RequestWithUser, ResponseJWT } from "../../types";
 
 const auth = (req: RequestWithUser, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -19,7 +10,7 @@ const auth = (req: RequestWithUser, res: Response, next: NextFunction) => {
     jwt.verify(token!, process.env.JWT_ACCESS_KEY!, (err, credentials) => {
         if (err) res.status(403).send({ status: "error", message: "Authentication error" });
 
-        req.user = (credentials as ResponseExpected).user;
+        req.user = (credentials as ResponseJWT).user;
 
         next();
     });

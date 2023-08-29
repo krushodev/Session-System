@@ -15,5 +15,5 @@ export const generateAccessToken = (user: User) => {
 }
 
 export const generateRefreshToken = (user: User) => {
-    return jwt.sign({ user: {...user, password: undefined } }, process.env.JWT_REFRESH_KEY!, { expiresIn: "1m" });
+    return jwt.sign({ user: { id: user.id } }, process.env.JWT_REFRESH_KEY!, { expiresIn: "10m" });
 }

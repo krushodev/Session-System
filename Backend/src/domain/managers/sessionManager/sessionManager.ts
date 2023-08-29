@@ -1,8 +1,12 @@
+import jwt from "jsonwebtoken";
+
 import container from "../../../container";
 
 import IUserRepository from "../../../data/repositories/interfaces/userRepositoryInterface";
-import { generateHash, validateHash } from "../../../shared";
+import { generateAccessToken, generateHash, generateRefreshToken, validateHash } from "../../../shared";
 import ISessionManager from "./sessionManagerInterface";
+
+import { ResponseJWT } from "../../../types";
 
 class SessionManager implements ISessionManager {
     private userRepository: IUserRepository = container.resolve("UserRepository"); 
@@ -16,7 +20,10 @@ class SessionManager implements ISessionManager {
 
         if (!passwordValidation) throw new Error("Incorrect password");
 
-        return user;
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
+        return { accessToken, refreshToken};
     }
 
     public async signup(data: { username: string, email: string, password: string } ) {
@@ -25,6 +32,26 @@ class SessionManager implements ISessionManager {
         await this.userRepository.saveOne({...data, password: hashedPassword});
 
         return false;
+    }
+
+    public async resolveRefreshToken(data: { refreshToken: string }) {
+        const { refreshToken } = data;
+
+        let userId = "";
+
+        jwt.verify(refreshToken!, process.env.JWT_REFRESH_KEY!, (err, credentials) => {
+            if (err) throw new Error("Token has expired");
+
+            userId = (credentials as ResponseJWT).user.id;
+        });
+
+        const user = await this.userRepository.findOne(userId);
+
+        if (!user) throw new Error("User not found");
+
+        const newAccessToken = generateAccessToken(user);
+
+        return newAccessToken;
     }
 }
 

@@ -20,16 +20,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
     const saveUserData = (data: AuthResponse) => {
         const { accessToken, refreshToken } = data.payload;
 
-        localStorage.setItem("token", JSON.stringify(refreshToken));
+        const decodedAccessToken: { user: User } | null = decodeToken(accessToken);
+        const decodedRefreshToken: { user: { id: string } } | null = decodeToken(refreshToken);
 
-        setAccessToken(accessToken);
-
-        const decoded: { user: User } | null = decodeToken(accessToken);
-
-        if (decoded?.user) {
-            setUser(decoded.user);
+        if (decodedAccessToken?.user && decodedRefreshToken?.user.id) {
+            setAccessToken(accessToken);
+            localStorage.setItem("token", JSON.stringify(refreshToken));
+            setUser(decodedAccessToken.user);
             setIsAuthenticated(true);
-        }
+        }        
     }
     
     const getAccessToken = () => {
@@ -40,44 +39,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode}) => {
         return user;
     }
 
-    const resolveWithExistentData = async() => {
+    const checkData = async() => {
         const refreshToken = JSON.parse(localStorage.getItem("token")!);
 
-        const isTokenExpired = isExpired(refreshToken);
+        if (!(refreshToken) || isExpired(refreshToken)) return;
 
-        if (!isTokenExpired) {
-            try {
+        try {
+            const response = await fetch("http://localhost:8085/api/sessions/refresh-token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ refreshToken })
+            });
 
-                const response = await fetch("http://localhost:8085/api/sessions/refresh-token", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ refreshToken })
-                })
-    
-                const data: AuthResponse = await response.json();
-    
-                const { accessToken } = data.payload;
-    
-                const decoded: { user: User } | null = decodeToken(accessToken);
-    
-                if (decoded?.user) {
-                    setAccessToken(accessToken);
-                    setUser(decoded.user);
-                    setIsAuthenticated(true);
-                }
-            } catch (err) {
-                console.log(err)
+            const data: AuthResponse = await response.json();
+
+            if (!(data.payload.accessToken)) {
+                return alert("No se pudo obtener el token");
             }
+
+            const { accessToken } = data.payload;
+        
+            const decoded: { user: User } | null = decodeToken(accessToken);
+
+            setAccessToken(accessToken);
+            setUser(decoded!.user);
+            setIsAuthenticated(true);
+        } catch (err) {
+            console.log(err)
         }
     }
 
     useEffect(() => {
-        if (!accessToken) {
-            resolveWithExistentData();
-        }
-    }, [accessToken]);
+        checkData();
+    }, []);
     
     return(
         <AuthContext.Provider value={{ isAuthenticated, saveUserData, getAccessToken, getUser }}>

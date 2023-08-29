@@ -6,7 +6,7 @@ const sessionsRouter = Router();
 
 sessionsRouter.post("/login", SessionController.login);
 sessionsRouter.post("/signup", SessionController.signup);
-sessionsRouter.get("/refresh-token", SessionController.provideRefreshToken);
+sessionsRouter.post("/refresh-token", SessionController.provideRefreshToken);
 sessionsRouter.get("/private", auth, SessionController.private);
 
 export default sessionsRouter;

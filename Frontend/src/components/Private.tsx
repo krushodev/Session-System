@@ -4,11 +4,11 @@ import { useAuth } from "../context/authContext";
 import { User } from "../types";
 
 const Private = () => {
-  const [userInfo, setUserInfo] = useState<User | null>(null);
+  // const [userInfo, setUserInfo] = useState<User | null>(null);
 
-  const auth = useAuth();
+  const user = useAuth()?.getUser();
 
-  useEffect(() => {
+  /* useEffect(() => {
     const loadData = async() => {
       const response = await fetch("http://localhost:8085/api/sessions/private", {
         method: "GET",
@@ -26,11 +26,11 @@ const Private = () => {
     }
 
     loadData();
-  }, [auth]);
+  }, [auth]); */
 
   return (
     <div>
-        { userInfo ? <h2>Hola { userInfo.username }</h2> : <h1>Cargando datos...</h1> }
+        { user ? <h2>Hola { user?.username }</h2> : <h1>Cargando datos...</h1> }
     </div>
   )
 }

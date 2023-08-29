@@ -29,7 +29,7 @@ const LoginForm = () => {
 
       const data: AuthResponse = await response.json();
 
-      auth?.saveUser(data);
+      auth?.saveUserData(data);
 
     } catch (error) {
       console.log(error);

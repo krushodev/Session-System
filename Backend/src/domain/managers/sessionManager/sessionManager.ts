@@ -34,14 +34,12 @@ class SessionManager implements ISessionManager {
         return false;
     }
 
-    public async resolveRefreshToken(data: { refreshToken: string }) {
-        const { refreshToken } = data;
-
+    public async resolveRefreshToken(data: string) {
         let userId = "";
 
-        jwt.verify(refreshToken!, process.env.JWT_REFRESH_KEY!, (err, credentials) => {
+        jwt.verify(data!, process.env.JWT_REFRESH_KEY!, (err, credentials) => {
             if (err) throw new Error("Token has expired");
-
+            
             userId = (credentials as ResponseJWT).user.id;
         });
 

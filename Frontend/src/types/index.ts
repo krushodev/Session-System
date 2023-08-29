@@ -6,7 +6,7 @@ export interface User {
 
 export interface AuthResponse {
     payload: {
-        user: User;
         accessToken: string;
+        refreshToken: string;
     }
 }

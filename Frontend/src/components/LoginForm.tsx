@@ -4,6 +4,8 @@ import { Redirect } from "wouter";
 import {  useAuth } from "../context/authContext";
 import { AuthResponse, AuthResponseError } from "../types";
 
+import { Box, Button, FormControl, Stack, TextField } from "@mui/material";
+
 const LoginForm = () => {
   const auth = useAuth();
 
@@ -45,17 +47,17 @@ const LoginForm = () => {
   if (auth?.isAuthenticated) return <Redirect to="/" />
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input type="email" onChange={formik.handleChange} name="email" id="email" />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input type="password" onChange={formik.handleChange} name="password" id="password" />
-      </div>
-      <button type="submit">Enviar</button>
-    </form>
+    <Box component="form" sx={{ maxWidth: "100%" }} onSubmit={formik.handleSubmit}>
+      <Stack spacing={{ xs: 5, md: 7 }} sx={{ width: "80%", m: "0 auto", maxWidth: "30em"}}>
+        <FormControl>
+          <TextField label="Email" type="email" onChange={formik.handleChange} name="email"/>
+        </FormControl>
+        <FormControl>
+          <TextField label="Password" type="password" onChange={formik.handleChange} name="password" />
+        </FormControl>
+        <Button type="submit" variant="contained" sx={{ width: "100%", p: "0.8em" }}>Enviar</Button>
+      </Stack>
+    </Box>
   );
 }
 

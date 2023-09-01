@@ -4,6 +4,8 @@ import { Redirect } from "wouter";
 import { AuthResponseError } from "../types";
 import { useState } from "react";
 
+import { Box, Button, FormControl, Stack, TextField } from "@mui/material";
+
 const RegisterForm = () => {
   const auth = useAuth();
   const [isRegistered, setIsRegistered] = useState(false);
@@ -20,6 +22,8 @@ const RegisterForm = () => {
   });
 
   const handleSubmit = async(values: { username: string, email: string, password: string }) => {
+    console.log(values);
+
     try {
       const response = await fetch("http://localhost:8085/api/sessions/signup", {
         method: "POST",
@@ -53,21 +57,20 @@ const RegisterForm = () => {
   }
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input type="text" onChange={formik.handleChange} name="username" id="username"/>
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input type="email" onChange={formik.handleChange} name="email" id="email" />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input type="password" onChange={formik.handleChange} name="password" id="password" />
-      </div>
-      <button type="submit">Enviar</button>
-    </form>
+    <Box component="form" sx={{ maxWidth: "100%" }} onSubmit={formik.handleSubmit}>
+      <Stack spacing={{ xs: 5, md: 7 }} sx={{ width: "80%", m: "0 auto", maxWidth: "30em"}}>
+        <FormControl>
+          <TextField label="Username" onChange={formik.handleChange} name="username"/>
+        </FormControl>
+        <FormControl>
+          <TextField label="Email" type="email" onChange={formik.handleChange} name="email"/>
+        </FormControl>
+        <FormControl>
+          <TextField label="Password" type="password" onChange={formik.handleChange} name="password" />
+        </FormControl>
+        <Button type="submit" variant="contained" sx={{ width: "100%", p: "0.8em" }}>Enviar</Button>
+      </Stack>
+    </Box>
   );
 }
 

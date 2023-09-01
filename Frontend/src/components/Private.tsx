@@ -12,10 +12,10 @@ const Private = () => {
     >
       {user ? (
         <Typography component="h2" sx={{ fontSize: "2em", textAlign: "center" }}>
-          ¡Bienvenido, {user.username}!
+          ¡Welcome, {user.username}!
         </Typography>
       ) : (
-        <h1>Cargando datos...</h1>
+        <h1>Loading data...</h1>
       )}
     </Container>
   );

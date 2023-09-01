@@ -1,4 +1,4 @@
-import { Route } from "wouter"
+import { Route } from "wouter";
 
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from "./components/LoginForm";
@@ -6,12 +6,12 @@ import Private from "./components/Private";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/helper/ProtectedRoute";
 
-import { AuthProvider } from './context/authContext.tsx'
+import { AuthProvider } from "./context/authContext.tsx";
 
 function App() {
   return (
     <AuthProvider>
-      <Navbar/>
+      <Navbar />
       <Route path="/">
         <ProtectedRoute>
           <Private />
@@ -20,7 +20,7 @@ function App() {
       <Route path="/signup" component={RegisterForm} />
       <Route path="/login" component={LoginForm} />
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;
